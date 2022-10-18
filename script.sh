@@ -50,8 +50,25 @@ echo Removing Alias
 unalias -a
 echo Locking Root
 passwd -l root
+echo "PermitRootLogin no" >> /etc/ssh/sshd_config
+echo disabling ctrl+alt+del
 sudo systemctl mask ctrl-alt-del.target
 sudo systemctl daemon-reload
+#samba prompt
+read -r -p "Delete Samba? [y/n] " input 
+case $input in
+      [yY][eE][sS]|[yY])
+            echo removing samba
+            apt-get remove .*samba.* .*smb.*
+            ;;
+      [nN][oO]|[nN])
+            echo "sad"
+            ;;
+      *)
+            echo "Invalid input..."
+            exit 1
+            ;;
+esac
 clear
 # Hacking Tools
 echo Removing Common Hacking Tools
@@ -63,7 +80,6 @@ ufw enable
 ufw logging high
 echo "net.ipv6.conf.all.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.conf
 echo 0 | sudo tee /proc/sys/net/ipv4/ip_forward
-echo "nospoof on" | sudo tee -a /etc/host.conf
 clear
 # Checking For Malware
 apt-get install clamav chkrootkit rkhunter
@@ -73,3 +89,13 @@ rkhunter --update
 rkhunter --propupd
 rkhunter -c --enable all --disable none
 # Secure password requirments 
+echo Securing Password requirments
+sleep 5
+sed -i 's/PASS_MAX_DAYS.*$/PASS_MAX_DAYS 90/;s/PASS_MIN_DAYS.*$/PASS_MIN_DAYS 10/;s/PASS_WARN_AGE.*$/PASS_WARN_AGE 7/' /etc/login.def
+clear
+# Listing Nonwork Related (save for last)
+echo Listing nonwork related files
+find /home/ -type f \( -name "*.mp3" -o -name "*.mp4" \)
+find /home/ -type f \( -name "*.avi" -o -name "*.wav" \)
+find /home/ -type f \( -name "*.tar.gz" -o -name "*.tgz" -o -name "*.zip" -o -name "*.deb" \)
+echo "Done running script, Good Luck (check above for files to delete)"
