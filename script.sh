@@ -91,7 +91,7 @@ rkhunter -c --enable all --disable none
 # Secure password requirments 
 echo Securing Password requirments
 sleep 5
-sed -i 's/PASS_MAX_DAYS.*$/PASS_MAX_DAYS 90/;s/PASS_MIN_DAYS.*$/PASS_MIN_DAYS 10/;s/PASS_WARN_AGE.*$/PASS_WARN_AGE 7/' /etc/login.def
+sed -i 's/PASS_MAX_DAYS.*$/PASS_MAX_DAYS 90/;s/PASS_MIN_DAYS.*$/PASS_MIN_DAYS 10/;s/PASS_WARN_AGE.*$/PASS_WARN_AGE 7/' /etc/login.defs
 clear
 # Listing Nonwork Related (save for last)
 echo Listing nonwork related files
